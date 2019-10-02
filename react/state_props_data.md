@@ -47,6 +47,9 @@ You can't change props.
 
 ```
 <Header name={'Some thing'} title={title}/>
+
+// In Header component
+<div>`{this.props.name} {this.props.title}`<div/>
 ```
 
 
