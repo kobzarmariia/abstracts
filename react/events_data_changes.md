@@ -29,6 +29,7 @@ function ActionLink() {
 }
 ```
 
+## Bind
 reactjs.org recomend bind in the constructor or use the syntax of class fields to avoid performance issues. For example, in the following cases.
 
 ```
@@ -63,6 +64,8 @@ ReactDOM.render(
 );
 
 ```
+
+
 
 
 

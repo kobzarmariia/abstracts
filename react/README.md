@@ -4,4 +4,5 @@
 1. [Introduction](./introduction.md)
 2. [Components](./components.md) 
 3. [State, Props & Data](./state_props_data.md) 
-4. [Events & Data Changes](./state_props_data.md) 
+4. [Events & Data Changes](./events_data_changes.md) 
+5. [Forms](./forms.md)
