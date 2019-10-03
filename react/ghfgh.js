@@ -1,22 +1,33 @@
-import React from 'react';
+import React, {Component} from 'react';
 
-import Footer from './Footer';
-import Header from './Header';
-
-export default class Layout extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {name: "Will"};
+class Article extends Component {
+    state = {
+        isOpen: true
     }
-    render() { 
-        return (
-            <div>
-                {this.state.name}
-                <Header />
-                <Footer />
-            </div>
-        );
+
+    render() {
+        const {article} = this.props;
+        const body = this.state.isOpen && <section>{article.text}</section>;
+            return (
+                <div>
+                    <h2>
+                        {article.title}
+                        <button onClick={handleClick}>
+                            {this.state.isOpen ? 'close' : 'open'}
+                        </button>
+                    </h2>
+                    {body}
+                    <h3>Creation date: {(new Date()).toDateString()}</h3>
+                </div>
+            );
+    }
+
+    handleClick = () => {
+        this.setState({
+            isOpen: !this.stat.isOpen
+        });
     }
 }
- 
-export default Layout;
+
+export default Article;
+

@@ -12,6 +12,9 @@ cd my-app
 npm start
 ```
 
+Or you can set up enviroment by yourself.
+Use Babel, Webpack...
+
 ### Component
 
 The core of React is everything is a component.
@@ -32,6 +35,11 @@ const app = document.getElementById('app');
 
 ReactDOM.render(<Layout/>, app);
 ```
+
+- independent part of the application
+- contains a piece of logic
+- describes his view
+- can be used many times
 
 ### JSX
 
