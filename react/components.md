@@ -21,8 +21,6 @@ class Welcome extends React.Component {
 
 ### Props and data transfer
 
-You can't change props.
-
 ```
 import React from 'react';
 
@@ -41,6 +39,29 @@ function Article(props) {
 export default Article;
 
 <Article article={data}/>
+```
+
+! Do not change external variables and do not change what comes in props !
+
+```
+import articles from '../fixtures'
+
+articles = articles.slice()
+```
+
+! Good style working with immutable data !
+ For example, an array is an object and upon transfer as props (PureComponent) doesn't see a change.
+
+ ```
+import articles from '../fixtures'
+
+<ArticleList articles={this.state.reverted ? articles.slice().reverse() : articles}>
+
+revert = () => {
+    this.setState({
+        reverted: !this.state.reverted
+    })
+}
 ```
 
 ### Class component
