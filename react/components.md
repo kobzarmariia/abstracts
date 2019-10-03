@@ -202,7 +202,13 @@ function ActionLink() {
   );
 }
 ```
+#### Reverse data flow
 
+Child element changes state of parent. Pass method to child.
+
+#### State raising
+
+We transfer all the state to the parent and pass it to the child as props.
 
 
 

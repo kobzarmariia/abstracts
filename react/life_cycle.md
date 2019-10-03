@@ -72,3 +72,16 @@ componentDidUpdate(prevProps, prevState)
 
 componentWillUnmount()
 Сlear subscriptions
+
+```
+componentDidMount() {
+              this.timerId = setInterval(
+                ()=> this.tick(),
+                1000
+              );
+            }
+
+componentWillUnmount() {
+              clearInterval(this.timerId);
+            }
+```
