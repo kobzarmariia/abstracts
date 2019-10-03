@@ -1,33 +1,18 @@
-import React, {Component} from 'react';
+import React from 'react';
+import Article from '../Article';
 
-class Article extends Component {
-    state = {
-        isOpen: true
-    }
-
-    render() {
-        const {article} = this.props;
-        const body = this.state.isOpen && <section>{article.text}</section>;
-            return (
-                <div>
-                    <h2>
-                        {article.title}
-                        <button onClick={handleClick}>
-                            {this.state.isOpen ? 'close' : 'open'}
-                        </button>
-                    </h2>
-                    {body}
-                    <h3>Creation date: {(new Date()).toDateString()}</h3>
-                </div>
-            );
-    }
-
-    handleClick = () => {
-        this.setState({
-            isOpen: !this.stat.isOpen
-        });
-    }
+export default function ArticleList({ articles }) {
+    const articleElements = articles.map([article, index] => 
+        <li key={article.id} className="arrticle-list_li">
+            <Article article = {article} defaulOpen = {index === 0}/>
+        </li>
+    )
+    return (
+        <ul>
+            {articleElements}
+        </ul>
+    )
 }
 
-export default Article;
+
 
