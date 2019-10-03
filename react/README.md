@@ -6,3 +6,4 @@
 3. [Forms](./forms.md) (Validation)
 4. [Life cycle](./life_cycle.md)
 5. [Router](./router.md)
+6. [Flux](./flux.md)
