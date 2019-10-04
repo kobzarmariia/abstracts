@@ -99,12 +99,48 @@ handleTab = (e) => {
 render() {
   const { activeTab } = this.state
   return (
-    <Fragment>
-      <button data-name={1} onClick={this.handleTab}>Tab1</button>
+    <Fragment> // !invisible wrapper
+      <button data-name={1} onClick={this.handleTab}>Tab1</button> //bad style
       <button data-name={2} onClick={this.handleTab}>Tab2</button>
       <button data-name={3} onClick={this.handleTab}>Tab3</button>
       {activeTab === 1 ? <Tab1 /> : activeTab === 2 ? <Tab2 /> : <Tab3 />}
     </Fragment>
   )
 }
+```
+
+### List & key
+
+Unique property - key
+
+```
+const TABS_BTN = [
+  {
+    dataName: 1, 
+    title: 'Tab1',
+  },
+  {
+    dataName: 1, 
+    title: 'Tab2',
+  }
+  ...
+]
+
+{TABS_BTN.map(({ dataName, title}) => { //method map
+  <button 
+    key={`${dataName}-${title}`} //generate unique property (1-Tab1)
+    data-name={dataName}
+    onClick={this.handleTab}
+  >{title}</button>
+})}
+```
+### Style
+
+```
+import './styles.css';
+const styles = {color: 'red', textTransform: 'uppercase'}
+
+<button style={{color: 'red', textTransform: 'uppercase'}}></button>
+<button style={styles}></button>
+<button className='import-style'></button>
 ```

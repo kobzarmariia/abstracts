@@ -43,6 +43,24 @@ class NameForm extends React.Component {
 }
 ```
 
+Another example: (good style)
+
+```
+class Form extends Component {
+  state ={
+    inputText: '',
+    textAreaText: '',
+  }
+
+  render() {
+    const { inputText, textAreaText } = this.state;
+    return (
+
+    )
+  }
+}
+```
+
 ### Filter example 
 
 ```
