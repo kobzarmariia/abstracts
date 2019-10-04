@@ -70,3 +70,41 @@ const element = React.createElement(
   'Hi'
 );
 ```
+
+### Сonditional rendering
+
+Inside JSX we cant use (if else) syntax
+
+Logical multiplication
+
+```
+{val && <span>We have val</span>}
+```
+
+Ternary operator
+
+```
+{val >= 10 ? <h2>Grate than 10</h2> : <h3>Less than <em>10</em></h3>}
+```
+
+Tabs 
+
+```
+handleTab = (e) => {
+  this.setState({
+    activeTab: +e.target.getAttribute('data-name'),
+  })
+}
+
+render() {
+  const { activeTab } = this.state
+  return (
+    <Fragment>
+      <button data-name={1} onClick={this.handleTab}>Tab1</button>
+      <button data-name={2} onClick={this.handleTab}>Tab2</button>
+      <button data-name={3} onClick={this.handleTab}>Tab3</button>
+      {activeTab === 1 ? <Tab1 /> : activeTab === 2 ? <Tab2 /> : <Tab3 />}
+    </Fragment>
+  )
+}
+```

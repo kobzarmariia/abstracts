@@ -214,8 +214,6 @@ If we make a setState() at the top of the virtual tree - the entire application 
 
 #### Default events
 
-You cannot prevent the default event handler by returning false. You must explicitly call preventDefault.
-
 ```
 function ActionLink() {
   function handleClick(e) {
@@ -230,6 +228,39 @@ function ActionLink() {
   );
 }
 ```
+
+You cannot prevent the default event handler by returning false. You must explicitly call preventDefault.
+
+```
+const MyLink = ({text, onClick}) => (
+    <a href="/test" onClick={onClick}>{text}</a>
+);
+
+MyLink.propTypes = {
+    text: PropTypes.string,
+    onClick: PropTypes.func,
+}
+
+MyLink.defaultTypes = {
+    text: 'link',
+    onClick: () => {},
+}
+
+class App extends Component {
+
+    handleClick = (e) => {
+        e.preventDefault(); //you can also use stopPropagartion();
+        console.log('ddd');
+    }
+
+    render() {
+        return (
+            <MyLink onClick={(e) => this.handleClick(e, 'test')} /> // handler can take only event
+        )
+    }
+}
+```
+
 #### Reverse data flow
 
 Child element changes state of parent. Pass method to child.
