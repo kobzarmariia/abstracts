@@ -7,3 +7,5 @@
 4. [Life cycle](./life_cycle.md)
 5. [Router](./router.md)
 6. [Flux](./flux.md)
+7. [Redux](./redux.md)
+8. [Testing](./testing.md)
