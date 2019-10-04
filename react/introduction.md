@@ -20,10 +20,10 @@ Use Babel, Webpack...
 The core of React is everything is a component.
 
 ```
-import React from "react";
+import React from "react"; // { Component }
 import ReactDOM from "react-dom";
 
-class Layout extends React.Component {
+class Layout extends React.Component { // Component
     render() {
         return (
             <h1>Hello World<\h1>

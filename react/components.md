@@ -1,6 +1,6 @@
 # Components 
 
-## Functional and Class Components
+## Functional and Class Components (statefull and stateless)
 
 ```
 function Welcome(props) {
@@ -12,7 +12,7 @@ This function is a component because it receives data in one object (“props”
 You can also define components as ES6 classes:
 
 ```
-class Welcome extends React.Component {
+class Welcome extends Component {
   render() {
     return <h1 className="Title" style={{backgroundColor: "#44014C", color: "white"}} >Привет, {this.props.name}</h1>;
   }
@@ -20,26 +20,6 @@ class Welcome extends React.Component {
 ```
 
 ### Props and data transfer
-
-```
-import React from 'react';
-
-function Article(props) {
-    const {article} = props;
-    const body = <section>{article.text}</section>
-        return (
-            <div>
-                <h2>title</h2>
-                {body}
-                <h3>Creation date: {(new Date()).toDateString()}</h3>
-            </div>
-        );
-}
- 
-export default Article;
-
-<Article article={data}/>
-```
 
 ! Do not change external variables and do not change what comes in props !
 
@@ -63,6 +43,54 @@ revert = () => {
     })
 }
 ```
+
+#### Prop types (props validation) and default props
+
+```
+import PropTypes from 'prop-types'
+
+const Counter = ({ counter, func, string, number }) => { //destruction (dood style)
+    console.log(props);
+    return <h1>(`Counter component. Counter value is: ${props.counter}`)</h1> //values will be dynamically updated
+} 
+
+Counter.propTypes = {
+    counter: PropTypes.number.isRequired, //Required props
+    func: PropTypes.func,
+    number: PropTypes.number,
+    string: PropTypes.string,
+}
+
+Counter.defaultProps = { //!for optional props
+    func: () => {},
+    number: 0,
+    string: '',
+}
+```
+
+and other types:
+
+```
+Сomponent.propTypes = {
+    node: PropTypes.node, //what can be rendered (numbers, strings) 
+    children: PropTypes.element, //another element ! <Lesson><Counter /></Lesson> (always it is can be children)
+    instance: PropTypes.instanceOf(Constructor), //for example Date
+    elem: PropTypes.oneOf(['val1', 'val2']), 
+    elem: PropTypes.oneOfType({ 
+        PropTypes.string,
+        PropTypes.number,
+    }),
+    array: PropTypes.arrayOf(PropTypes.string), //array of string 
+    object: PropTypes.objectOf(PropTypes.number), //object of number
+    obj: PropTypes.shape({ //object (whith their field)
+        color: PropTypes.string,
+        fontSize: PropTypes.number,
+        lineHeight: PropTypes.number,
+    }),
+}
+```
+
+{Recat.cloneElement(children, {counter: this.state.counter})}
 
 ### Class component
 
@@ -96,18 +124,18 @@ Recommended style:
 import React, {Component} from 'react';
 
 class Article extends Component {
-    constructor(props){
+    constructor(props){  // but here we can bind state with props
         super(props)
 
         this.state = {
             isOpen: false
         }
 
-        this.handleClick = handleClick.bind(this);
+        this.handleClick = handleClick.bind(this); // bind context here
     }
 
     render() {
-        const {article} = this.props;
+        const {article} = this.props; // destruction
         const body = this.state.isOpen && <section>{article.text}</section>;
             return (
                 <div>
@@ -160,7 +188,7 @@ class Article extends Component {
             );
     }
 
-    handleClick = () => {
+    handleClick = () => { // without bind, use arrow function 
         this.setState({
             isOpen: !this.stat.isOpen
         });
