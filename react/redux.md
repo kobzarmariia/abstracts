@@ -65,7 +65,7 @@ export default class Store {
 
 redux.js
 ```
-export function createStore(reducer, initialState) {
+export function createStore(reducer = { 0 }, initialState) { //specify by default for reducer
     let state = initialState; 
     let callbacks = [];
     
@@ -81,6 +81,8 @@ export function createStore(reducer, initialState) {
         return () => callbacks.filter(cb => cb !== callback);
     };
 
+    dispath({}); // Error without
+
     return { getState, dispatch, subscribe };
 }
 ```
@@ -91,7 +93,7 @@ export function createStore(reducer, initialState) {
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {createStore} from './redux';
+import {createStore} from 'redux'; //from installed library
 
 const initialState = { count: 0 };
 
@@ -104,9 +106,19 @@ function reducer(state, action) {
     }
 }
 
-const incrementAction = { type: 'INCREMENT', amount: 1 }; 
-const decrementAction = { type: 'DECREMENT', amount: 1 }; 
-const resetAction = { type: 'RESET' };
+//action creators
+function increment(amount) {
+    return { type: 'INCREMENT', amount };
+}
+
+function decrement(amount) {
+    return { type: 'DECREMENT', amount };
+}
+
+function reset() {
+    return { type: 'RESET' };
+}
+//action creators
 
 const store = new Store(reduser, initialState);
 
@@ -123,15 +135,17 @@ class Counter extends React.Component {
     }
 
     increment() {
-        store.dispatch(incrementAction);
+        let amount = parseInt(this.refs.amount.value || 1); //by default
+        store.dispatch(increment(amount));
     }
 
     decrement() {
-        store.dispatch(decrementAction);
+        let amount = parseInt(this.refs.amount.value || 1); //by default
+        store.dispatch(decrement(amount));
     }
 
     reset() {
-        store.dispatch(resetAction);
+        store.dispatch(reset());
     }
 
     renader() {
@@ -145,6 +159,8 @@ class Counter extends React.Component {
                     <button className="decrement" onClick={this.decrement}>-</button>
                     <button className="reset" onClick={this.reset}>R</button>
                 </div>
+
+                <input type="text" ref="amount" defaultValue="1" > //REFERENCE
             </div>
         )
     }
