@@ -41,6 +41,88 @@ ReactDOM.render(<Layout/>, app);
 - describes his view
 - can be used many times
 
+#### High Order Components
+
+Extending the functionality of a component by wrapping it in HOK
+
+If everywhere repeats (for example same className):
+
+```
+const AppLink = (props) => ({
+  render: () => (
+    <Link {...props} activeClassName="active" />
+  )
+})
+
+class Lesson extends Component {
+  render() {
+    return (
+      <Router>
+        <nav>
+          <AppLink to='/'>Home</AppLink>
+          <AppLink to='/portfolio'>Portfolio</AppLink>
+        </nav>
+      </Router>
+    )
+  }
+}
+```
+
+Preloader
+
+```
+const isEmpty = (prop) => (
+  prop === null ||
+  prop === undefined ||
+  (prop.hasOwnProperty('length') && prop.length === 0 ) ||
+  (prop.constructor === Object && Object.keys(prop).length === 0)
+);
+
+const LoadingHOC = (loadingProp) => (WrappedComponent) => {
+  return class LoadingHOC extends Component {
+    render () {
+      return isEmpty(this.props[loadingProp]) ?
+      <div className="loader" />
+      : <WrapperComponent {...this.props} />
+    }
+  }
+}
+
+class AppComponentUI extends Component {
+  render() {
+    return (
+      <div>{this.props.data.title}</div>
+    );
+  }
+}
+
+const AppComponent = LoadingHOC('data')(AppComponentUI);
+
+class Lesson extends Component {
+  state = {
+    data: {},
+  }
+
+  componentDidMount() {
+    fetch('http:...')
+    .then(response => response.json())
+    .then(response => this.updateState(data))
+  }
+
+  updateState = (data) => {
+    window.setTimeout(() => {
+      this.setState({ data })
+    });
+  }
+
+  render() {
+    return (
+      <AppComponent data={this.state .data}>
+  }
+}
+
+```
+
 ### JSX
 
 JSX it is a syntax extension to JavaScript.
@@ -55,6 +137,7 @@ ReactDOM.render(
   document.getElementById('root')
 );
 ```
+
 After compilation, each JSX expression becomes a normal JavaScript function call, the result of which is a JavaScript object.
 
 ```
@@ -87,7 +170,7 @@ Ternary operator
 {val >= 10 ? <h2>Grate than 10</h2> : <h3>Less than <em>10</em></h3>}
 ```
 
-Tabs 
+Tabs
 
 ```
 handleTab = (e) => {
@@ -116,24 +199,25 @@ Unique property - key
 ```
 const TABS_BTN = [
   {
-    dataName: 1, 
+    dataName: 1,
     title: 'Tab1',
   },
   {
-    dataName: 1, 
+    dataName: 1,
     title: 'Tab2',
   }
   ...
 ]
 
 {TABS_BTN.map(({ dataName, title}) => { //method map
-  <button 
+  <button
     key={`${dataName}-${title}`} //generate unique property (1-Tab1)
     data-name={dataName}
     onClick={this.handleTab}
   >{title}</button>
 })}
 ```
+
 ### Style
 
 ```
@@ -143,4 +227,25 @@ const styles = {color: 'red', textTransform: 'uppercase'}
 <button style={{color: 'red', textTransform: 'uppercase'}}></button>
 <button style={styles}></button>
 <button className='import-style'></button>
+```
+
+### Portals (modal windows)
+
+```
+class MyPortal extends Component {
+
+  el = document.createElement('div');
+
+  componentDidMount() {
+    document.body.createElement('div');
+  }
+
+  componentWillUnmount() {
+    document.body.removeChild(this.el);
+  }
+
+  render() {
+    return ReactDOM.createPortal(this.prop.children, el)
+  }
+}
 ```
