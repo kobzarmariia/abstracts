@@ -237,7 +237,7 @@ class MyPortal extends Component {
   el = document.createElement('div');
 
   componentDidMount() {
-    document.body.createElement('div');
+    document.body.createElement('div'); //where
   }
 
   componentWillUnmount() {
@@ -245,7 +245,38 @@ class MyPortal extends Component {
   }
 
   render() {
-    return ReactDOM.createPortal(this.prop.children, el)
+    return ReactDOM.createPortal(this.props.children, el)
+  }
+}
+
+
+// <MyPortal><span>TEXT</span></MyPortal>
+```
+
+### Context
+
+Before - passed on props from parent to child element
+Context - skips intermediate levels
+As an option to solve the problem - Redux
+
+```
+const TitleContext = React.createContext(); //create context
+
+const LevelThree = () => (
+  <TitleContext.Consumer>
+    { title => <h1>{title}</h1>}   //({ title, subtitle }) => ( <Fragment> <h1>{title}</h1> <h1>{subtitle}</h1> </Fragment>)
+  </TitleContext.Consumer>
+)
+const LevelTwo = () => <LevelThree />
+const LevelOne= () => <LevelTwo />
+
+class Lesson etends Component {
+  render () {
+    return (
+      <TitleContext.Provider value="Simple title"> //in value transmit object {{ title: 'One', subtitle: 'Two' }}
+        <LevelOne />
+      </TitleContext.Provider >
+    );
   }
 }
 ```
