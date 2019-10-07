@@ -2,7 +2,121 @@
 
 ## React router
 
+react-router, react-outer-dom, react-router-native
+
 Module: react-router-dom
+
+- brouser-router //processing in server dynamic request
+- hashe-router //static web-site
+
+Then each router create history object which store location to each page
+
+```
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+
+import Home from './...components/home/home';
+import Contacts from './.../contacts';
+import Posts from './.../posts';
+import Post from './.../post';
+import Error from './.../error';
+
+ReactDOM.Render((
+  <BrowserRouter>
+    <App> //it's our application & {children} from router (root - all static layout)
+      <Switch>
+        <Route exact path='/' component={Home} /> //exact compare Home '/'
+        <Route path='/contacts' component={Contacts} />
+        <Route exact path='/posts' component={Posts} /> //two similar route (will always work Posts)
+        <Route path='/posts/:id' component={Post} />
+        <Route path='*' component={Error} /> //nonexistent route
+      </Switch>
+    <App/> 
+  </BrowserRouter>
+), document.getElementById('root'));
+
+registerServiceWorker();
+```
+Navigation panel 
+Component Link do not overload page
+
+```
+import { NavLink } from 'react-router-dom'; //active route
+
+const Header = () => (
+  <header className="header">
+    <nav>
+      <ul className="nav">
+        <li><NavLink exact to='/'>Home</NavLink></li> //strict comparison
+        <li><NavLink to='/posts'>Posts</NavLink></li>
+        <li><NavLink to='/contacts'>Contacts</NavLink></li>
+      </ul>
+    </nav>
+  </header>
+)
+```
+Posts.jsx
+```
+import { Link } from 'react-router-dom';
+
+class Posts extends Component {
+  state = {
+    data: [],
+  }
+}
+
+componentDidMount() {
+  fetch('http:...')
+  .then(res => res.json())
+  .then(data => {
+    this.setState({
+      data
+    })
+  })
+}
+
+render() {
+  const { data } = this.state;
+
+  return (
+    <div>
+    <h1>Posts:</h1>
+    <ul className="posts">
+      {data.map(({ id, title }) => 
+        <li key={id}><Link to={'/posts/${id}'}>{title}</Link></li>
+      )}
+    </ul>
+    </div>
+  )
+}
+```
+Post.jsx
+```
+class Posts extends Component {
+  state = {
+    post: {},
+  }
+
+componentDidMount() {
+  const id = this.props.match.params.id || '';
+
+  fetch('http.../${id}')
+  .then(res => res.json())
+  .then(data => {
+    this.setState({
+      post: data
+    })
+  })
+} 
+
+render() {
+  const { post } = this.state;
+  const { title, body } = post;
+
+  return(
+
+  )
+}
+```
 
 ### Route Options
 ```
