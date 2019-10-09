@@ -10,4 +10,5 @@
 6. [Router](./router.md)
 7. [Flux](./flux.md)
 8. [Redux](./redux.md)
-9. [Testing](./testing.md)
+9. [Animation](./animation.md)
+10. [Testing](./testing.md)
