@@ -96,6 +96,8 @@ it('should render a document title', () => {
 });
 ```
 
+## Component testing
+
 ComponentName.test.js 
 
 commant to use 
@@ -132,6 +134,23 @@ describe('<NavigationItems />', () => { //test suit
     it('should an exact logout button', () => {
         wrapper.setProps({isAuthenticated: true});
         expect(wrapper.contains(<NavigationItem link="/logout">Logout</NavigationItem>)).toEqual(true);
+    });
+});
+```
+
+Simple Title testing:
+
+```
+import React from "react";
+import { create } from "react-test-renderer";
+import Title from "./title";
+
+describe("Title component", () => {
+    test("After creation emty <Title> a component with a simple title will be created", () => {
+      const component = create(<Title />);
+      const instance = component.root;
+      let ToDoList = instance.findByType('h1');
+      expect(ToDoList.props.children).toBe('Simple title');
     });
 });
 ```
