@@ -12,3 +12,4 @@
 8. [Redux](./redux.md)
 9. [Animation](./animation.md)
 10. [Testing](./testing.md)
+11. [Custom components and features](./features)

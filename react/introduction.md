@@ -229,6 +229,131 @@ const styles = {color: 'red', textTransform: 'uppercase'}
 <button className='import-style'></button>
 ```
 
+We can apply styles dynamically.
+Inside render by condition.
+
+```
+if (..)
+style[':hover'] = {
+BackgroundColor: 'salmon',
+Color: 'black'
+}
+```
+
+npm run eject
+(add config folder)
+
+webpack.config.dev
+
+```
+test: /\.css$/,
+...
+options: {
+  importLoaders: 1,
+  modules: true,
+  localIdentName: '[name]__[local]__[hash:base64:5]'
+}
+```
+
+add same to config prod file!
+
+Then you can ude uniq class names.
+
+```
+import classes from './App.css'
+
+className = {classes.App}
+```
+
+#### Radium
+
+npm i radium
+
+```
+import React, { Component } from "react";
+import "./App.css";
+import Radium, { StyleRoot } from "radium";  //that`s because i use
+import Person from "./Person/Person";
+
+class App extends Component {
+  ...
+render() {
+    const style = {
+      backgroundColor: "green",
+      color: "white",
+      font: "inherit",
+      border: "1px solid blue",
+      padding: "8px",
+      cursor: "pointer",
+      ":hover": {
+        backgroundColor: "lightgreen",
+        color: "black"
+      }
+    };
+
+    let persons = null;
+
+    if (this.state.showPersons) {
+      ...
+      style.backgroundColor = "red";
+      style[":hover"] = {  //attention
+        backgroundColor: "salmon",
+        color: "black"
+      };
+    }
+
+    const classes = [];
+    if (this.state.persons.length <= 2) {
+      classes.push("red"); // classes = ['red']
+    }
+    if (this.state.persons.length <= 1) {
+      classes.push("bold"); // classes = ['red', 'bold']
+    }
+
+    return (
+      <StyleRoot>
+        <div className="App">
+          <h1>Hi, I'm a React App</h1>
+          <p className={classes.join(" ")}>This is really working!</p>
+          <button style={style} onClick={this.togglePersonsHandler}>
+            Toggle Persons
+          </button>
+          {persons}
+        </div>
+      </StyleRoot>
+    );
+  }
+}
+
+export default Radium(App);
+```
+
+Media query
+
+```
+import React from 'react';
+import Radium from 'radium';
+
+import './Person.css';
+
+const person = ( props ) => {
+    const style = {
+        '@media (min-width: 500px)': {
+            width: '450px'
+        }
+    };
+    return (
+        <div className="Person" style={style}>
+            <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p>
+            <p>{props.children}</p>
+            <input type="text" onChange={props.changed} value={props.name} />
+        </div>
+    )
+};
+
+export default Radium(person);
+```
+
 ### Portals (modal windows)
 
 ```
@@ -278,5 +403,20 @@ class Lesson etends Component {
       </TitleContext.Provider >
     );
   }
+}
+```
+
+### Debugging
+
+Sources tab - F12 - debug
+Add breackpoint - data in object (can check)
+
+Current state of components or props - react-devtool (you can check component)
+
+On finction body:
+
+```
+if (condition) {
+  throw new Error('Smth wrong');
 }
 ```
