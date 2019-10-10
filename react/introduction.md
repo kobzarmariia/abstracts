@@ -19,11 +19,33 @@ Use Babel, Webpack...
 
 The core of React is everything is a component.
 
+- independent part of the application
+- contains a piece of logic
+- describes his view
+- can be used many times
+
+Stateful (Containers)
+class XY extends Component
+
+- Access to state
+- Lifecycle hooks
+- Access State and Props via 'this'
+
 ```
 import React from "react"; // { Component }
 import ReactDOM from "react-dom";
 
 class Layout extends React.Component { // Component
+  state = {
+    persons: [
+      {...}
+    ]
+  }
+
+  nameChangedHandeler = (event, id) => {
+    ...
+  }
+
     render() {
         return (
             <h1>Hello World<\h1>
@@ -36,10 +58,26 @@ const app = document.getElementById('app');
 ReactDOM.render(<Layout/>, app);
 ```
 
-- independent part of the application
-- contains a piece of logic
-- describes his view
-- can be used many times
+Functional component (try to use them as often as possible)
+
+Stateless
+const XY = (props) => {...}
+
+- access props via 'props'
+
+```
+const persons = (props) => props.persons.map((person, index) =>
+  return <Person
+    click={() => props.clicked(index)}
+    name={person.name}
+    age={person.age}
+    key={person.id}
+    changed={(event) => props.changed(event, person.id)}
+  />
+);
+
+export default persons;
+```
 
 #### High Order Components
 
@@ -419,4 +457,37 @@ On finction body:
 if (condition) {
   throw new Error('Smth wrong');
 }
+```
+
+Add ErrorBoudary (if that code can ahve some problem)
+
+```
+import React, { Component } from 'react';
+
+class ErrorBoundary extends Component {
+  state = {
+    hasError: false;
+    errorMessage: ''
+  }
+
+  componentDidCatch = (error, info) => {
+    this.setState({hasError: true, errorMessage: error});
+  }
+
+  render() {
+    if (this.state.hasError){
+      return <h1>{this.state.errorMessage}</h1>;
+    } else {
+      return this.props.children;
+    }
+  }
+}
+
+export default ErrorBoundary;
+
+// than wrap component
+
+<ErrorBoundary>
+  <Person ... />
+</ErrorBoundary>
 ```
