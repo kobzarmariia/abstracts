@@ -1,4 +1,4 @@
-# Structure
+# Hooks
 
 Divide and rule
 

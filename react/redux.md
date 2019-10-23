@@ -4,10 +4,11 @@
 
 ![Flux vs Redux](https://miro.medium.com/max/949/1*3lvNEQE4SF6Z1l-680cfSQ.jpeg)
 
-Redux 
+Redux
+
 - has only one state
 - stor only for reading
-- clear functions (action, reducers) manupulated date inside himself and return new data 
+- clear functions (action, reducers) manupulated date inside himself and return new data
 
 Add module: redux, react-redux
 
@@ -17,9 +18,65 @@ Documentation: https://redux.js.org
 
 Application state and interface management
 
+## Example
+
+https://habr.com/ru/post/459706/
+
+![Reducer](https://hsto.org/getpro/habr/post_images/a6d/03c/4be/a6d03c4bed38b0634872fd143ae75ef2.png)
+
+![Actions](https://hsto.org/getpro/habr/post_images/fff/4c7/b80/fff4c7b80cdcee4b95a36f90f1816bb2.png)
+
+![actionsTypes](https://hsto.org/getpro/habr/post_images/f20/ed8/522/f20ed8522e2e4f4a4a7d3e6f95f4f8cf.png)
+
+![Store](https://hsto.org/getpro/habr/post_images/57f/62c/0dc/57f62c0dc76f727fbc3d8fdd17cb90bc.png)
+
+![Provider](https://hsto.org/getpro/habr/post_images/a7e/5ce/5c3/a7e5ce5c30ce45283e4d679b1ac6486d.png)
+
+![Connect](https://hsto.org/getpro/habr/post_images/7f8/3b9/e04/7f83b9e04b5d0b5671e116cbc6afea50.png)
+
+Redux Thunk
+
+Redux Thunk middleware allows you to write action creators that return a function instead of an action. The thunk can be used to delay the dispatch of an action, or to dispatch only if a certain condition is met. The inner function receives the store methods dispatch and getState as parameters.
+
+```
+const INCREMENT_COUNTER = 'INCREMENT_COUNTER';
+
+function increment() {
+  return {
+    type: INCREMENT_COUNTER,
+  };
+}
+
+function incrementAsync() {
+  return (dispatch) => {
+    setTimeout(() => {
+      // Yay! Can invoke sync or async actions with `dispatch`
+      dispatch(increment());
+    }, 1000);
+  };
+}
+```
+
+Use
+
+```
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import rootReducer from './reducers/index';
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
+```
+
+### Mob X (async)
+
+![Store](https://hsto.org/getpro/habr/post_images/d4d/a7e/38b/d4da7e38bca1e81d1f982b25d2ecfe0d.png)
+
+![Component](https://hsto.org/getpro/habr/post_images/993/ba9/c4c/993ba9c4c01cf3fdc45fb6056553ab85.png)
+
 ## ToDo List
 
 index.js
+
 ```
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -38,6 +95,7 @@ registerServiceWorker();
 ```
 
 App.js (root component)
+
 ```
 import React, { Fragment } from 'react';
 
@@ -55,6 +113,7 @@ export default App;
 ```
 
 constants.js
+
 ```
 export const ADD_TASK = 'ADD_TASK';
 export const REMOVE_TASK = 'REMOVE_TASK';
@@ -69,6 +128,7 @@ Same component where we connect to redux and manipulating with data and where we
 Folder todo - + todo.css
 
 todo.jsx (import - input, list, footer components)
+
 ```
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -108,7 +168,7 @@ class ToDo extends Component {
 
         return (
             <div className="todo-wrapper">
-                <ToDoInput onKeyPress onChange={this.handleInputChange} value={taskText}/> 
+                <ToDoInput onKeyPress onChange={this.handleInputChange} value={taskText}/>
                 {isTaskExist && <ToDoList taskList={tasks} >}
                 {isTaskExist && <Footer amount={tasks.length} activeFilter={activeFilter} >}
             </div>
@@ -124,6 +184,7 @@ export default connect(state => ({
 ### Components (folder)
 
 footer.jsx
+
 ```
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -176,6 +237,7 @@ export default Footer;
 ```
 
 title.jsx
+
 ```
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -198,6 +260,7 @@ export default Title;
 ```
 
 todo-input.jsx
+
 ```
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -233,6 +296,7 @@ export default ToDoInput;
 ```
 
 todo-list.jsx
+
 ```
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -296,9 +360,11 @@ ToDoItem.defaultProps = {
 
 export default ToDoItem;
 ```
+
 #### Add REDUX
 
 index.js (Provider)
+
 ```
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -313,6 +379,7 @@ ReactDOM.render((
 ```
 
 store.js (createStore, compose)
+
 ```
 import { createStore, compose } from 'redux';
 import rootReducer from './reducers/index';
@@ -329,7 +396,7 @@ const configureStore = preloadedState => (
     createStore( // create store here
         rootReduser,
         preloadedState, //initial state
-        composeEnhancers() 
+        composeEnhancers()
     )
 )
 
@@ -338,9 +405,10 @@ const store = configureStore({});
 
 ### Reducers (folder)
 
-divide by tasks 
+divide by tasks
 
 index.js
+
 ```
 import { combineReducers } from 'redux';
 import tasks from './tasks';
@@ -353,6 +421,7 @@ export default rootReducer;
 ```
 
 tasks.js (clean function)
+
 ```
 import { ADD_TASK, REMOVE_TASK, COMPLETE_TASK } from '../../constants';
 import { load } from 'redux-localstorage-simple';
@@ -411,6 +480,7 @@ export default tasks;
 ```
 
 filters.js
+
 ```
 import { CHANGE_FILTER } from '../../constants';
 
@@ -432,6 +502,7 @@ export default filter;
 ### Actions (folder)
 
 actionCreator.js
+
 ```
 import { ADD_TASK, REMOVE_TASK, COMPLETE_TASK, CHANGE_FILTER } from '../../constants';
 
@@ -460,18 +531,18 @@ export const changeFilter = activeFilter => ({
 
 ## Reducers
 
-Reducers specify how the application's state changes in response to actions sent to the store. 
+Reducers specify how the application's state changes in response to actions sent to the store.
 Remember that actions only describe what happened, but don't describe how the application's state changes.
 
 Must be a pure function!
+
 - does not change incoming parameters
 - performs only one action
 
 ## Actions
 
-Actions are payloads of information that send data from your application to your store. 
+Actions are payloads of information that send data from your application to your store.
 They are the only source of information for the store. You send them to the store using store.dispatch().
-
 
 ## Store
 
@@ -480,11 +551,11 @@ The store has the following responsibilities:
 - Holds application state;
 - Allows access to state via getState();
 - Allows state to be updated via dispatch(action);
-- Registers listeners via subscribe (listener); 
+- Registers listeners via subscribe (listener);
 - Handles unregistering of listeners via the function returned by subscribe(listener). (Observer pattern - callback (subscribe))
 
-
 How work Redux: store.js
+
 ```
 export default class Store {
     constructor(updateState, state) {
@@ -513,11 +584,12 @@ export default class Store {
 - dispach - (update)
 
 redux.js
+
 ```
 export function createStore(reducer = { 0 }, initialState) { //specify by default for reducer
-    let state = initialState; 
+    let state = initialState;
     let callbacks = [];
-    
+
     const getState = () => state;
 
     const dispatch = action => {
