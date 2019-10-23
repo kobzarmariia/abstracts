@@ -124,3 +124,165 @@ class HelloUA extends React.Component {
 
 export default HelloUA
 ```
+
+## Redux Saga
+
+An alternative to redux-thunk (async action). Move all side effect actions in saga. (action only pure action creator)
+
+https://redux-saga.js.org/docs/introduction/BeginnerTutorial.html
+
+```
+npm i redux-saga
+```
+
+auth.js action
+
+sagas folder - auth.js
+
+```
+import { delay } from "redux-saga";
+import { put, call } from "redux-saga/effects";
+import axios from "axios";
+
+import * as actions from "../actions/index";
+
+//async
+export function* logoutSaga(action) {
+  yield call([localStorage, "removeItem"], "token"); //await
+  yield call([localStorage, "removeItem"], "expirationDate");
+  yield call([localStorage, "removeItem"], "userId");
+  yield put(actions.logoutSucceed());
+  //return {type: actionTypes.AUTH_LOGOUT}
+  //yield put({type: actionTypes.AUTH_LOGOUT})
+}
+
+export function* checkAuthTimeoutSaga(action) {
+  yield delay(action.expirationTime * 1000); //setTimeout
+  yield put(actions.logout());
+}
+
+export function* authUserSaga(action) {
+  yield put(actions.authStart());
+  const authData = {
+    email: action.email,
+    password: action.password,
+    returnSecureToken: true
+  };
+  let url =
+    "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyB5cHT6x62tTe-g27vBDIqWcwQWBSj3uiY";
+  if (!action.isSignup) {
+    url =
+      "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyB5cHT6x62tTe-g27vBDIqWcwQWBSj3uiY";
+  }
+  try {
+    const response = yield axios.post(url, authData);
+
+    const expirationDate = yield new Date(
+      new Date().getTime() + response.data.expiresIn * 1000
+    );
+    yield localStorage.setItem("token", response.data.idToken);
+    yield localStorage.setItem("expirationDate", expirationDate);
+    yield localStorage.setItem("userId", response.data.localId);
+    yield put(
+      actions.authSuccess(response.data.idToken, response.data.localId)
+    );
+    yield put(actions.checkAuthTimeout(response.data.expiresIn));
+  } catch (error) {
+    yield put(actions.authFail(error.response.data.error));
+  }
+}
+
+// + export const AUTH_INITIATE_LOGOUT = 'AUTH_INITIATE_LOGOUT'; -> AUTH_LOGOUT
+```
+
+run in action
+
+```
+export const logout = () => {
+  return {
+    type: actionTypes.AUTH_INITIATE_LOGOUT
+  }
+}
+
+export const logoutSucceed () => {
+    return {
+    type: actionTypes.AUTH_LOGOUT
+  }
+}
+```
+
+in saga folder index.js
+
+```
+import { takeEvery, all, takeLatest } from "redux-saga/effects";
+
+import * as actionTypes from "../actions/actionTypes";
+import {
+  logoutSaga,
+  checkAuthTimeoutSaga,
+  authUserSaga,
+  authCheckStateSaga
+} from "./auth";
+import { initIngredientsSaga } from "./burgerBuilder";
+import { purchaseBurgerSaga, fetchOrdersSaga } from "./order";
+
+export function* watchAuth() {
+  yield all([
+    takeEvery(actionTypes.AUTH_CHECK_TIMEOUT, checkAuthTimeoutSaga),
+    takeEvery(actionTypes.AUTH_INITIATE_LOGOUT, logoutSaga),
+    takeEvery(actionTypes.AUTH_USER, authUserSaga),
+    takeEvery(actionTypes.AUTH_CHECK_STATE, authCheckStateSaga)
+  ]);
+}
+
+export function* watchBurgerBuilder() {
+  yield takeEvery(actionTypes.INIT_INGREDIENTS, initIngredientsSaga);
+}
+
+export function* watchOrder() {
+  yield takeLatest(actionTypes.PURCHASE_BURGER, purchaseBurgerSaga);
+  yield takeEvery(actionTypes.FETCH_ORDERS, fetchOrdersSaga);
+}
+```
+
+index.js
+
+```
+import createSagaMiddleware from 'redux-saga'
+import { createStore, applyMiddleware, compose, combineReducers } from "redux";
+
+import { watchAuth } from './sagas'
+
+const composeEnhancers =
+  process.env.NODE_ENV === "development"
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    : null || compose;
+
+const rootReducer = combineReducers({
+  burgerBuilder: burgerBuilderReducer,
+  order: orderReducer,
+  auth: authReducer
+});
+
+const sagaMiddleware = createSagaMiddleware();
+
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(thunk, sagaMiddleware))
+);
+
+sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(watchBurgerBuilder);
+sagaMiddleware.run(watchOrder);
+
+const app = (
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
+);
+
+ReactDOM.render(app, document.getElementById("root"));
+registerServiceWorker();
+```
