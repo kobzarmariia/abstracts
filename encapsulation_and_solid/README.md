@@ -1,6 +1,9 @@
-# Encapsulation and SOLID
+# Encapsulation and SOLID (by Mark Seemann)
+
+This course teaches how to write maintainable and flexible object-oriented code.
 
 ## Contents:
+
 1. [Encapsulation](./encapsulation.md)
 2. [The Single Responsibility Principle](./the_single_responsibility_principle.md) (...)
 3. [The Open Closed Principle](./the_open_closed_principle.md) (...)
