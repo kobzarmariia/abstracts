@@ -12,5 +12,5 @@
 8. [Redux](./redux.md)
 9. [Animation](./animation.md)
 10. [Testing](./testing.md)
-11. [Features (Next.js)](./features)
-12. [Hooks](./hooks)
+11. [Features (Next.js)](./features.md)
+12. [Hooks](./hooks.md)
