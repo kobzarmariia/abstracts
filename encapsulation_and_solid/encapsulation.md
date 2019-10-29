@@ -39,7 +39,7 @@ Missconseption: private, {get; set;}
 
 Hiding not information, hiding - implementation details!
 
-Invalid states are impossible! (protection of invariants)
+!Invalid states are impossible! (protection of invariants)
 
 ### Beyong OO:
 
@@ -114,7 +114,7 @@ How can you trust that a Query to return a useful response?
 Be conservative in what you sent.
 Be liberal in what you accept.
 
-Returning null - bad decision.
+!Returning null - bad decision. NEVER return null.
 
 Refactoring.
 
