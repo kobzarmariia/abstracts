@@ -3,8 +3,8 @@
 ## Contents:
 
 1. [Introduction](./introduction.md)
-2. [Components](./components.md) (Functional and Class Components, State, Props, Events)
-3. [Forms](./forms.md) (Validation)
+2. [Components](./components.md)
+3. [Forms](./forms.md)
 4. [Life cycle](./life_cycle.md)
 5. [Api](./api.md)
 6. [Router](./router.md)
