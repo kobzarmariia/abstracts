@@ -10,7 +10,7 @@
 
 ## React Native
 
-[Articles](./react_native.md)
+[Articles](./react_native/README.md)
 
 ## JS
 
