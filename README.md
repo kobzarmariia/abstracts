@@ -18,12 +18,12 @@
 
 ## Algorithms & Data Structures
 
-[Articles](./algorithms_and_data_structures)
+[Articles](./algorithms_and_data_structures/README.md)
 
 ## Networks Fundamentals
 
-[Articles](./networks_fundamentals)
+[Articles](./networks_fundamentals/README.md)
 
 ## Operating System Fundamentals
 
-[Articles](./operating_system_fundamentals)
+[Articles](./operating_system_fundamentals/README.md)
