@@ -1,5 +1,20 @@
 # Complexity / O-notation
 
+## Complexity 
+
+Algorithmic complexity is concerned about how fast or slow particular algorithm performs. 
+
+We define complexity as a numerical function T(n) - time versus the input size n. 
+
+BUT A given algorithm will take different amounts of time on the same inputs depending on such factors as: processor speed; instruction set, disk speed, brand of compiler and etc.
+
+We will measure time T(n) as the number of elementary "steps" (defined in any way), provided each such step takes constant time.
+
+EXAMPLE addition of two integers. 
+the total computational time is T(n) = c * n, where c is time taken by addition of two bits. 
+On different computers, additon of two bits might take different time, say c1 and c2.
+This shows that different machines result in different slopes, but time T(n) grows linearly (Time Complexity) as input size increases.
+
 ## Big O Notation
 
 Big O notation is used to classify algorithms according to how their running time or space requirements grow as the input size grows. On the chart below you may find most common orders of growth of algorithms specified in Big O notation.
@@ -10,15 +25,23 @@ Below is the list of some of the most used Big O notations and their performance
 
 | Big O Notation | Computations for 10 elements | Computations for 100 elements | Computations for 1000 elements  |
 | -------------- | ---------------------------- | ----------------------------- | ------------------------------- |
-| **O(1)**       | 1                            | 1                             | 1                               |
+| **O(1)** (constant) | 1                            | 1                             | 1                               |
 | **O(log N)**   | 3                            | 6                             | 9                               |
-| **O(N)**       | 10                           | 100                           | 1000                            |
+| **O(N)** (linear) | 10                           | 100                           | 1000                            |
 | **O(N log N)** | 30                           | 600                           | 9000                            |
-| **O(N^2)**     | 100                          | 10000                         | 1000000                         |
+| **O(N^2)** (quadratic time T=an^2+bn+c) | 100                          | 10000                         | 1000000                         |
 | **O(2^N)**     | 1024                         | 1.26e+29                      | 1.07e+301                       |
 | **O(N!)**      | 3628800                      | 9.3e+157                      | 4.02e+2567                      |
 
-### Data Structure Operations Complexity
+One simple operation (get element of collection): O(1) T = O(1)+O(1) = O(1) (return total OR total = 0)
+For loop: each single operation -> O(1) * n = O(N)
+For loop in loop: O(1) * n^2 = O(N^2)
+Divide and Conquer: O(log n)
+Iteration with uses Divide and Conquer: O(n log n)
+
+T = O(1) + n^2 * O(N) + O(1) = O(N^2)
+
+### Data Structure Operations Complexity 
 
 | Data Structure          | Access    | Search    | Insertion | Deletion  | Comments  |
 | ----------------------- | :-------: | :-------: | :-------: | :-------: | :-------- |
@@ -34,6 +57,11 @@ Below is the list of some of the most used Big O notations and their performance
 | **Bloom Filter**        | -         | 1         | 1         | -         | False positives are possible while searching |
 
 ### Array Sorting Algorithms Complexity
+
+ Best, Worst and Average case analysis 
+ Examples for linear search: 
+ Best Case -> serching key element at first index
+ Worst Case -> serching key element at last index
 
 | Name                  | Best            | Average             | Worst               | Memory    | Stable    | Comments  |
 | --------------------- | :-------------: | :-----------------: | :-----------------: | :-------: | :-------: | :-------- |
