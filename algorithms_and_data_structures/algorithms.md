@@ -33,6 +33,29 @@ in the array.
 
 ## Sorting
 
+```
+export default class Sort {
+  constructor(originalCallbacks) {
+    this.callbacks = Sort.initSortingCallbacks(originalCallbacks);
+    this.comparator = new Comparator(this.callbacks.compareCallback);
+  }
+
+  static initSortingCallbacks(originalCallbacks) {
+    const callbacks = originalCallbacks || {};
+    const stubCallback = () => {};
+
+    callbacks.compareCallback = callbacks.compareCallback || undefined;
+    callbacks.visitingCallback = callbacks.visitingCallback || stubCallback;
+
+    return callbacks;
+  }
+
+  sort() {
+    throw new Error('sort method must be implemented');
+  }
+}
+```
+
 ### Bubble Sort
 
 Bubble sort, sometimes referred to as sinking sort, is a 
@@ -45,6 +68,44 @@ indicates that the list is sorted.
 
 ![Algorithm Visualization](https://upload.wikimedia.org/wikipedia/commons/c/c8/Bubble-sort-example-300px.gif)
 
+```
+export default class BubbleSort extends Sort {
+  sort(originalArray) {
+    // Flag that holds info about whether the swap has occur or not.
+    let swapped = false;
+    // Clone original array to prevent its modification.
+    const array = [...originalArray];
+
+    for (let i = 1; i < array.length; i += 1) {
+      swapped = false;
+
+      // Call visiting callback.
+      this.callbacks.visitingCallback(array[i]);
+
+      for (let j = 0; j < array.length - i; j += 1) {
+        // Call visiting callback.
+        this.callbacks.visitingCallback(array[j]);
+
+        // Swap elements if they are in wrong order.
+        if (this.comparator.lessThan(array[j + 1], array[j])) {
+          [array[j], array[j + 1]] = [array[j + 1], array[j]];
+
+          // Register the swap.
+          swapped = true;
+        }
+      }
+
+      // If there were no swaps then array is already sorted and there is
+      // no need to proceed.
+      if (!swapped) {
+        return array;
+      }
+    }
+
+    return array;
+  }
+}
+```
 
 | Name                  | Best            | Average             | Worst               | Memory    | Stable    | Comments  |
 | --------------------- | :-------------: | :-----------------: | :-----------------: | :-------: | :-------: | :-------- |
@@ -65,6 +126,39 @@ memory is limited.
 
 ![Algorithm Visualization](https://upload.wikimedia.org/wikipedia/commons/9/94/Selection-Sort-Animation.gif)
 
+```
+export default class SelectionSort extends Sort {
+  sort(originalArray) {
+    // Clone original array to prevent its modification.
+    const array = [...originalArray];
+
+    for (let i = 0; i < array.length - 1; i += 1) {
+      let minIndex = i;
+
+      // Call visiting callback.
+      this.callbacks.visitingCallback(array[i]);
+
+      // Find minimum element in the rest of array.
+      for (let j = i + 1; j < array.length; j += 1) {
+        // Call visiting callback.
+        this.callbacks.visitingCallback(array[j]);
+
+        if (this.comparator.lessThan(array[j], array[minIndex])) {
+          minIndex = j;
+        }
+      }
+
+      // If new minimum element has been found then swap it with current i-th element.
+      if (minIndex !== i) {
+        [array[i], array[minIndex]] = [array[minIndex], array[i]];
+      }
+    }
+
+    return array;
+  }
+}
+```
+
 | Name                  | Best            | Average             | Worst               | Memory    | Stable    | Comments  |
 | --------------------- | :-------------: | :-----------------: | :-----------------: | :-------: | :-------: | :-------- |
 | **Selection sort**    | n<sup>2</sup>   | n<sup>2</sup>       | n<sup>2</sup>       | 1         | No        |           |
@@ -80,6 +174,42 @@ sort.
 ![Algorithm Visualization](https://upload.wikimedia.org/wikipedia/commons/4/42/Insertion_sort.gif)
 
 ![Algorithm Visualization](https://upload.wikimedia.org/wikipedia/commons/0/0f/Insertion-sort-example-300px.gif)
+
+```
+export default class InsertionSort extends Sort {
+  sort(originalArray) {
+    const array = [...originalArray];
+
+    // Go through all array elements...
+    for (let i = 0; i < array.length; i += 1) {
+      let currentIndex = i;
+
+      // Call visiting callback.
+      this.callbacks.visitingCallback(array[i]);
+
+      // Go and check if previous elements and greater then current one.
+      // If this is the case then swap that elements.
+      while (
+        array[currentIndex - 1] !== undefined
+        && this.comparator.lessThan(array[currentIndex], array[currentIndex - 1])
+      ) {
+        // Call visiting callback.
+        this.callbacks.visitingCallback(array[currentIndex - 1]);
+
+        // Swap the elements.
+        const tmp = array[currentIndex - 1];
+        array[currentIndex - 1] = array[currentIndex];
+        array[currentIndex] = tmp;
+
+        // Shift current index left.
+        currentIndex -= 1;
+      }
+    }
+
+    return array;
+  }
+}
+```
 
 | Name                  | Best            | Average             | Worst               | Memory    | Stable    | Comments  |
 | --------------------- | :-------------: | :-----------------: | :-----------------: | :-------: | :-------: | :-------- |
@@ -109,6 +239,65 @@ emulate merge sort (top-down).
 
 ![Merge Sort](https://upload.wikimedia.org/wikipedia/commons/e/e6/Merge_sort_algorithm_diagram.svg)
 
+```
+export default class MergeSort extends Sort {
+  sort(originalArray) {
+    // Call visiting callback.
+    this.callbacks.visitingCallback(null);
+
+    // If array is empty or consists of one element then return this array since it is sorted.
+    if (originalArray.length <= 1) {
+      return originalArray;
+    }
+
+    // Split array on two halves.
+    const middleIndex = Math.floor(originalArray.length / 2);
+    const leftArray = originalArray.slice(0, middleIndex);
+    const rightArray = originalArray.slice(middleIndex, originalArray.length);
+
+    // Sort two halves of split array
+    const leftSortedArray = this.sort(leftArray);
+    const rightSortedArray = this.sort(rightArray);
+
+    // Merge two sorted arrays into one.
+    return this.mergeSortedArrays(leftSortedArray, rightSortedArray);
+  }
+
+  mergeSortedArrays(leftArray, rightArray) {
+    let sortedArray = [];
+
+    // In case if arrays are not of size 1.
+    while (leftArray.length && rightArray.length) {
+      let minimumElement = null;
+
+      // Find minimum element of two arrays.
+      if (this.comparator.lessThanOrEqual(leftArray[0], rightArray[0])) {
+        minimumElement = leftArray.shift();
+      } else {
+        minimumElement = rightArray.shift();
+      }
+
+      // Call visiting callback.
+      this.callbacks.visitingCallback(minimumElement);
+
+      // Push the minimum element of two arrays to the sorted array.
+      sortedArray.push(minimumElement);
+    }
+
+    // If one of two array still have elements we need to just concatenate
+    // this element to the sorted array since it is already sorted.
+    if (leftArray.length) {
+      sortedArray = sortedArray.concat(leftArray);
+    }
+
+    if (rightArray.length) {
+      sortedArray = sortedArray.concat(rightArray);
+    }
+
+    return sortedArray;
+  }
+}
+```
 
 | Name                  | Best            | Average             | Worst               | Memory    | Stable    | Comments  |
 | --------------------- | :-------------: | :-----------------: | :-----------------: | :-------: | :-------: | :-------- |
@@ -139,6 +328,50 @@ The horizontal lines are pivot values.
 
 ![Quicksort](https://upload.wikimedia.org/wikipedia/commons/6/6a/Sorting_quicksort_anim.gif)
 
+```
+export default class QuickSort extends Sort {
+  sort(originalArray) {
+    // Clone original array to prevent it from modification.
+    const array = [...originalArray];
+
+    // If array has less than or equal to one elements then it is already sorted.
+    if (array.length <= 1) {
+      return array;
+    }
+
+    // Init left and right arrays.
+    const leftArray = [];
+    const rightArray = [];
+
+    // Take the first element of array as a pivot.
+    const pivotElement = array.shift();
+    const centerArray = [pivotElement];
+
+    // Split all array elements between left, center and right arrays.
+    while (array.length) {
+      const currentElement = array.shift();
+
+      // Call visiting callback.
+      this.callbacks.visitingCallback(currentElement);
+
+      if (this.comparator.equal(currentElement, pivotElement)) {
+        centerArray.push(currentElement);
+      } else if (this.comparator.lessThan(currentElement, pivotElement)) {
+        leftArray.push(currentElement);
+      } else {
+        rightArray.push(currentElement);
+      }
+    }
+
+    // Sort left and right arrays.
+    const leftArraySorted = this.sort(leftArray);
+    const rightArraySorted = this.sort(rightArray);
+
+    // Let's now join sorted left array with center array and with sorted right array.
+    return leftArraySorted.concat(centerArray, rightArraySorted);
+  }
+}
+```
 
 | Name                  | Best            | Average             | Worst               | Memory    | Stable    | Comments  |
 | --------------------- | :-------------: | :-----------------: | :-----------------: | :-------: | :-------: | :-------- |
@@ -165,6 +398,48 @@ exchange
 ![Shellsort](https://www.tutorialspoint.com/data_structures_algorithms/images/shell_sort_gap_2.jpg)
 
 ![Shellsort](https://www.tutorialspoint.com/data_structures_algorithms/images/shell_sort_step_2.jpg)
+
+```
+export default class ShellSort extends Sort {
+  sort(originalArray) {
+    // Prevent original array from mutations.
+    const array = [...originalArray];
+
+    // Define a gap distance.
+    let gap = Math.floor(array.length / 2);
+
+    // Until gap is bigger then zero do elements comparisons and swaps.
+    while (gap > 0) {
+      // Go and compare all distant element pairs.
+      for (let i = 0; i < (array.length - gap); i += 1) {
+        let currentIndex = i;
+        let gapShiftedIndex = i + gap;
+
+        while (currentIndex >= 0) {
+          // Call visiting callback.
+          this.callbacks.visitingCallback(array[currentIndex]);
+
+          // Compare and swap array elements if needed.
+          if (this.comparator.lessThan(array[gapShiftedIndex], array[currentIndex])) {
+            const tmp = array[currentIndex];
+            array[currentIndex] = array[gapShiftedIndex];
+            array[gapShiftedIndex] = tmp;
+          }
+
+          gapShiftedIndex = currentIndex;
+          currentIndex -= gap;
+        }
+      }
+
+      // Shrink the gap.
+      gap = Math.floor(gap / 2);
+    }
+
+    // Return sorted copy of an original array.
+    return array;
+  }
+}
+```
 
 | Name                  | Best            | Average             | Worst               | Memory    | Stable    | Comments  |
 | --------------------- | :-------------: | :-----------------: | :-----------------: | :-------: | :-------: | :-------- |
