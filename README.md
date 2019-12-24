@@ -18,7 +18,7 @@
 
 ## Algorithms & Data Structures
 
-[Articles](./algorithms_and_data_structures.md)
+[Articles](./algorithms_and_data_structures)
 
 ## Networks Fundamentals
 
