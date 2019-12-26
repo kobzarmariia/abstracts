@@ -37,8 +37,6 @@ Encapsulation:
   • The basis of the Internet
 
 ## OSI & TCP/IP
-[Articles](./osi_tsp_ip.md)
+[Articles](./osi_tcp_ip.md)
 
-## TCP/UDP
-[Articles](./tsp_udp.md)
 
