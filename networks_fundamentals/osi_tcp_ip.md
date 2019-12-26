@@ -13,7 +13,7 @@ The OSI model describes:
   • Appointment of each level -> Protocols are described in separate standards.
 Not a network architecture!
 
-1. **Physical level (bit)**
+### 1. **Physical level (bit)**
 
 Network hardware - hub
 
@@ -41,7 +41,7 @@ Wireless technology
 Satellite channels
 Wireless Optics (Lasers)
 
-2. **Channel level (Frame)**
+### 2. **Channel level (Frame)**
 
 Network hardware - Switch, point access (hub - Ethernet) 
 
@@ -103,7 +103,7 @@ Solution of problems
 Lack of acknowledgment of receipt of a frame!
 CSMA/CA - Multiple Access with listening to the carrier frequency with collision avoidance
 
-3. **Network layer (Package)**
+### 3. **Network layer (Package)**
 
 Network hardware - Router
 Ethernet, Wi-Fi, 5G / 4G / 3G, MPLS, (ATM, TokenRing, FDDI - outdated)
@@ -129,6 +129,12 @@ The address is issued for a limited period (rental)
 
 **ICMP** - Internet Control Message Protocol - Network Level Error Reporting, Network Health Testing (ping, traceroute)
 
+**OSPF** - Open Shortest Path First is a dynamic routing protocol based on link-state technology and using the Dijkstra algorithm to find the shortest path.
+
+**ISMP** - is used to send error messages and other exceptional situations that occurred during data transfer, for example, the requested service is unavailable, or the host or router does not respond.
+
+**IGMP** - multicast control protocol for IP-based networks.
+ 
 Unites networks built on the basis of different
 technology
 Tasks:
@@ -136,15 +142,19 @@ Tasks:
   • Addressing (network or global addresses)
   • Determining the packet forwarding route to composite network (routing)
 
-4. **Transport level (Segment / Datagram) data delivery guarantee**
+### 4. **Transport level (Segment / Datagram) data delivery guarantee**
 
 Network independent
-
-
 
 **TCP** - User Datagram Protocol - **reliable** byte stream transmission (Guaranteed data delivery and order following)
  
 **UDP** - Transmition Control Protocol - reliability of delivery compared to IP no increases (does not guaranteed data delivery BUT faster)
+
+**SSL** - Secure Sockets Layer - cryptographic protocol, which implies a more secure connection.
+
+**TLS** - ransport layer security (after ssl)
+
+**SCTP** -  Stream Control Transmission Protocol
 
 Provides data transfer between host processes (directly)
 
@@ -165,7 +175,7 @@ Through level
   • Messages are delivered from the source to the addressee
   • The previous levels use the link principle chains
 
-5. **Session level (Message)**
+### 5. **Session level (Message)**
 
 Allows you to establish communication sessions
 Tasks:
@@ -173,7 +183,7 @@ Tasks:
   • Marker management (prevention simultaneous critical operation)
   • Synchronization (tags in messages for resuming transmission in case of failure)
 
-6. **Presentation level (Message)**
+### 6. **Presentation level (Message)**
 
 Provides syntax matching and semantics of transmitted data
   • Character representation formats
@@ -182,7 +192,7 @@ Encryption and decryption
 Example:
   • Transport Layer Security (TLS) / Secure Sockets Layer (SSL)
 
-7. **Application level (Message)**
+### 7. **Application level (Message)**
 
 **DNS** - Domain Name System
 
